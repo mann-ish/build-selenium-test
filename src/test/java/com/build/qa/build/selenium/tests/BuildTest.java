@@ -27,8 +27,14 @@ public class BuildTest extends BaseFramework {
 	 * @difficulty Easy
 	 */
 	@Test
-	public void searchForProductLandsOnCorrectProduct() { 
-		// TODO: Implement this test
+	public void searchForProductLandsOnCorrectProduct() {
+	    String productName = "Quoizel MY1613";
+	    driver.get(getConfiguration("HOMEPAGE"));
+        HomePage homePage = new HomePage(driver, wait);
+        homePage.searchFor(productName);
+        softly.assertThat(homePage.foundItem(productName))
+        .as("The website should be able to find product " + productName + ".")
+        .isTrue();
 	}
 	
 	/** 
@@ -38,10 +44,10 @@ public class BuildTest extends BaseFramework {
 	 * @difficulty Easy-Medium
 	 */
 	@Test
-	public void addProductToCartFromCategoryDrop() { 
+	public void addProductToCartFromCategoryDrop() {
 		// TODO: Implement this test
 	}
-	
+
 	/** 
 	 * Add a product to the cart and email the cart to yourself, also to my email address: jgilmore+SeleniumTest@build.com
 	 * Include this message in the "message field" of the email form: "This is {yourName}, sending you a cart from my automation!"
@@ -49,10 +55,10 @@ public class BuildTest extends BaseFramework {
 	 * @difficulty Medium-Hard
 	 */
 	@Test
-	public void addProductToCartAndEmailIt() { 
+	public void addProductToCartAndEmailIt() {
 		// TODO: Implement this test
 	}
-	
+
 	/** 
 	 * Go to a category drop page (such as Bathroom Faucets) and narrow by
 	 * at least two filters (facets), e.g: Finish=Chromes and Theme=Modern
