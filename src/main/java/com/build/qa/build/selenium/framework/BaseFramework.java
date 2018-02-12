@@ -11,11 +11,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
@@ -59,6 +62,24 @@ public abstract class BaseFramework {
 		wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS)
 				.ignoring(NoSuchElementException.class);
 	}
+
+	protected void closeSubscriberDialogueIfDisplayed() {
+        By closeButtonLocator = By.xpath("//*[@id='email-subscribe-splash']//button[contains(@class, 'close')]");
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(closeButtonLocator)).click();
+            LOG.info("Closed the subscribe dialogue.");
+        } catch (TimeoutException timeoutException) {
+            LOG.warn("No subscribe dialogue displayed yet.");
+        }
+    }
+
+    protected void sleep(long second) {
+        try {
+            Thread.sleep(TimeUnit.SECONDS.toMillis(second));
+        } catch (InterruptedException e) {
+            LOG.info("InterruptedException while Thread.sleep", e);
+        }
+    }
 
 	protected WebDriver getDriver() {
 		return driver;

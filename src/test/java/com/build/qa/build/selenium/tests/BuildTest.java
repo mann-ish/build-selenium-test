@@ -3,7 +3,10 @@ package com.build.qa.build.selenium.tests;
 import org.junit.Test;
 
 import com.build.qa.build.selenium.framework.BaseFramework;
+import com.build.qa.build.selenium.pageobjects.cartpage.CartPage;
+import com.build.qa.build.selenium.pageobjects.categorypage.CategoryPage;
 import com.build.qa.build.selenium.pageobjects.homepage.HomePage;
+import com.build.qa.build.selenium.pageobjects.productpage.ProductPage;
 
 public class BuildTest extends BaseFramework { 
 	
@@ -45,7 +48,34 @@ public class BuildTest extends BaseFramework {
 	 */
 	@Test
 	public void addProductToCartFromCategoryDrop() {
-		// TODO: Implement this test
+	    driver.get("https://www.build.com/bathroom-sinks/c108504");
+        CategoryPage categoryPage = new CategoryPage(driver, wait);
+        softly.assertThat(categoryPage.onCategoryContent())
+        .as("The website should load up with the category content.")
+        .isTrue();
+
+        closeSubscriberDialogueIfDisplayed();
+        String selectedProductName = categoryPage.pickProductByIndex(2);
+
+        ProductPage productPage = new ProductPage(driver, wait);
+        softly.assertThat(productPage.onProductContent())
+        .as("The website should load up with the product content upon clicking on a product.")
+        .isTrue();
+
+        softly.assertThat(productPage.readProductName())
+        .as("The product page should display the selected product from category page.")
+        .isEqualTo(selectedProductName);
+        productPage.addToCart();
+        productPage.proceedToCart();
+
+        CartPage cartPage = new CartPage(driver, wait);
+        softly.assertThat(cartPage.onCartPageContent())
+        .as("The website should load up with the cart page.")
+        .isTrue();
+
+        softly.assertThat(cartPage.readFirstProductName())
+        .as("The cart should display the selected product.")
+        .startsWith(selectedProductName);
 	}
 
 	/** 
