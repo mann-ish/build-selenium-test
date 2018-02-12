@@ -68,6 +68,7 @@ public abstract class BaseFramework {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(closeButtonLocator)).click();
             LOG.info("Closed the subscribe dialogue.");
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".modal-backdrop"))); // Needed for Chrome
         } catch (TimeoutException timeoutException) {
             LOG.warn("No subscribe dialogue displayed yet.");
         }

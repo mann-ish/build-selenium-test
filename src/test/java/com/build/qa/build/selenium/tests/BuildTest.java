@@ -37,6 +37,7 @@ public class BuildTest extends BaseFramework {
 	public void searchForProductLandsOnCorrectProduct() {
 	    String productName = "Quoizel MY1613";
 	    driver.get(getConfiguration("HOMEPAGE"));
+	    closeSubscriberDialogueIfDisplayed();
         HomePage homePage = new HomePage(driver, wait);
         homePage.searchFor(productName);
         softly.assertThat(homePage.foundItem(productName))
@@ -119,6 +120,7 @@ public class BuildTest extends BaseFramework {
 	@Test
 	public void facetNarrowBysResultInCorrectProductCounts() { 
 	    navigateToHomePage();
+	    closeSubscriberDialogueIfDisplayed();
         new HomePage(driver, wait).goToBathRoomFaucet();
         CategoryPage categoryPage = new CategoryPage(driver, wait);
         closeSubscriberDialogueIfDisplayed();
