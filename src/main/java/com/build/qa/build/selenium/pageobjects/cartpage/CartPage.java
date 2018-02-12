@@ -24,4 +24,10 @@ public class CartPage extends BasePage{
         By headingLocator = By.cssSelector("a.item-title");
         return wait.until(ExpectedConditions.visibilityOfElementLocated(headingLocator)).getText();
     }
+
+    public void clickEmail() {
+        By emailButtonLocator = By.cssSelector("button.btn-email");
+        sleep(5L); // Need hard sleep before clicking - Need to investigate
+        wait.until(ExpectedConditions.visibilityOfElementLocated(emailButtonLocator)).click();
+    }
 }

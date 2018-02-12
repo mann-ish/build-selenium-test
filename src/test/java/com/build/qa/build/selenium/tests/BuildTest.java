@@ -5,6 +5,7 @@ import org.junit.Test;
 import com.build.qa.build.selenium.framework.BaseFramework;
 import com.build.qa.build.selenium.pageobjects.cartpage.CartPage;
 import com.build.qa.build.selenium.pageobjects.categorypage.CategoryPage;
+import com.build.qa.build.selenium.pageobjects.emailpage.EmailPage;
 import com.build.qa.build.selenium.pageobjects.homepage.HomePage;
 import com.build.qa.build.selenium.pageobjects.productpage.ProductPage;
 
@@ -86,7 +87,23 @@ public class BuildTest extends BaseFramework {
 	 */
 	@Test
 	public void addProductToCartAndEmailIt() {
-		// TODO: Implement this test
+	    addProductToCartFromCategoryDrop();
+        new CartPage(driver, wait).clickEmail();
+
+        EmailPage emailPage = new EmailPage(driver, wait);
+        softly.assertThat(emailPage.onEmailPageContent())
+        .as("The website should load up with the email form.")
+        .isTrue();
+
+        emailPage.populateYourName("Manish Aatreya");
+        emailPage.populateYourEmail("manish.aatreya@gmail.com");
+        emailPage.populateRecipientName("Jared Gilmore");
+        emailPage.populateRecipientEmail("jgilmore+SeleniumTest@build.com");
+        emailPage.populateMessage("This is Manish Aatreya, sending you a cart from my automation!");
+        emailPage.sendEmail();
+        softly.assertThat(emailPage.emailSentSuccess())
+        .as("The website should display success message for emailing the cart.")
+        .isTrue();
 	}
 
 	/** 
