@@ -33,4 +33,11 @@ public class HomePage extends BasePage {
 	    By productTitle = By.id("heading");
         return wait.until(ExpectedConditions.textToBePresentInElementLocated(productTitle, productName)) != null;
 	}
+
+    public void goToBathRoomFaucet() {
+        By bathroomLocator = By.xpath("//li[@class='header-menu-style']/a[@data-tracking='nav:menu:category:Bathroom']");
+        wait.until(ExpectedConditions.presenceOfElementLocated(bathroomLocator)).click();
+        By faucetLocator = By.xpath("//div[@class='panel-body-list-group']/a[text()='Bathroom Faucets']");
+        wait.until(ExpectedConditions.presenceOfElementLocated(faucetLocator)).click();
+    }
 }

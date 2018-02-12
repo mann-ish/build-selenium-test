@@ -1,5 +1,8 @@
 package com.build.qa.build.selenium.pageobjects.categorypage;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -38,5 +41,35 @@ public class CategoryPage extends BasePage {
         LOG.info("Product is selected. Title : '{}' - Index : '{}'", productTitle, index);
 
         return productTitle;
+    }
+
+    public void selectFilter(String selection) {
+        String checkBoxXpath = String.format("//label[@data-facet-value='%s']/input", selection);
+        By countLocator = By.xpath(checkBoxXpath);
+        wait.until(ExpectedConditions.elementToBeClickable(countLocator)).click();
+        sleep(5L); // It takes time for applying filter and page refresh
+    }
+
+    public int count(String selection) {
+        String countXpath = String.format("//label[@data-facet-value='%s']/span[@class='count']", selection);
+        By countLocator = By.xpath(countXpath);
+        String textCount = wait.until(ExpectedConditions.presenceOfElementLocated(countLocator)).getText();
+
+        // Parse the number from parentheses
+        Pattern pattern = Pattern.compile("\\((?<actualCount>\\d+)\\)");
+        Matcher countMatcher = pattern.matcher(textCount);
+        if (countMatcher.find()) {
+            String actualCount = countMatcher.group("actualCount");
+            return Integer.parseInt(actualCount);
+        }
+        return 0; // Defaults to zero when the text pattern does not match - for error cases
+    }
+
+    public int totalResultsCount() {
+        String countXpath = "//span[@class='total']/span[@class='js-num-results']";
+        By countLocator = By.xpath(countXpath);
+        String textCount = wait.until(ExpectedConditions.presenceOfElementLocated(countLocator)).getText();
+        String actualCount = textCount.replace(",", "");
+        return Integer.parseInt(actualCount);
     }
 }

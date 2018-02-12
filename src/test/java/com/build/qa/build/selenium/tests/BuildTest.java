@@ -1,6 +1,8 @@
 package com.build.qa.build.selenium.tests;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.build.qa.build.selenium.framework.BaseFramework;
 import com.build.qa.build.selenium.pageobjects.cartpage.CartPage;
@@ -9,8 +11,9 @@ import com.build.qa.build.selenium.pageobjects.emailpage.EmailPage;
 import com.build.qa.build.selenium.pageobjects.homepage.HomePage;
 import com.build.qa.build.selenium.pageobjects.productpage.ProductPage;
 
-public class BuildTest extends BaseFramework { 
-	
+public class BuildTest extends BaseFramework {
+    private static final Logger LOG = LoggerFactory.getLogger(BuildTest.class);
+
 	/** 
 	 * Extremely basic test that outlines some basic
 	 * functionality and page objects as well as assertJ
@@ -115,6 +118,25 @@ public class BuildTest extends BaseFramework {
 	 */
 	@Test
 	public void facetNarrowBysResultInCorrectProductCounts() { 
-		// TODO: Implement this test
+	    navigateToHomePage();
+        new HomePage(driver, wait).goToBathRoomFaucet();
+        CategoryPage categoryPage = new CategoryPage(driver, wait);
+        closeSubscriberDialogueIfDisplayed();
+
+        // Apply filter Finish=Chromes
+        int chromeCount = categoryPage.count("Chromes");
+        LOG.info("Chrome count : {}", chromeCount);
+        categoryPage.selectFilter("Chromes");
+        softly.assertThat(categoryPage.totalResultsCount())
+        .as("The product count should be narrowed down by selected category of Finish=Chromes.")
+        .isEqualTo(chromeCount);
+
+        // Apply filter Theme=Modern
+        int modernCount = categoryPage.count("Modern");
+        LOG.info("Modern count : {}", modernCount);
+        categoryPage.selectFilter("Modern");
+        softly.assertThat(categoryPage.totalResultsCount())
+        .as("The product count should be narrowed down by selected category of Theme=Modern.")
+        .isEqualTo(modernCount);
 	}
 }
